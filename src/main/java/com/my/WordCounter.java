@@ -5,6 +5,8 @@ import akka.actor.ActorRef;
 import akka.actor.Props;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
+import scala.collection.Seq;
+import scala.collection.mutable.StringBuilder;
 
 public class WordCounter extends AbstractActor {
 
@@ -28,8 +30,7 @@ public class WordCounter extends AbstractActor {
         return receiveBuilder()
                 .match(String.class, greeting -> {
                     quantity+=1;
-                    printer.tell(String.valueOf(quantity),getSelf());
-                    log.info("quantity of words = {}",quantity);
+                    printer.tell(String.format("words quantity = %05d",quantity),getSelf());
                 })
                 .build();
     }

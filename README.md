@@ -5,10 +5,17 @@ React sample.
 
 ## Testing the app
 
+mvn clean install
+
+bash-3.2$ ./target/akka-0.1-SNAPSHOT.jar /tmp/README.txt
+
 ### Components
 
 Service | Type | test url
---- |---|---
+--- |a root(the Main class )|---
+--- |SplitterObserver|---
+LongestWord |ReverseWord|WordCount
+----- |-----|Printer
 
 
 ## Authors
