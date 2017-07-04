@@ -11,8 +11,24 @@ bash-3.2$ ./target/akka-0.1-SNAPSHOT.jar /tmp/README.txt
 
 ### Components
 
-Service | Type | test url
---- |a root(the Main class )|---
+                |--------------------------------|
+                |     a root(the Main class )    |
+                |--------------------------------|
+                           ^    ^                           ^  ^
+                          /      \                          |  |
+                       is-a     is-a                        |  |
+                        /          \                        |  |
+                       /           |--------------|         |  |
+                      /            |  SplayTree   |-has-a---|  |
+                     /             |--------------|            |
+                    /                                        is-a
+                   /                                           |
+    |----------------|                                  |------------|
+    |     AVLTree    |--has-a-------------------------->| AVLNode    |
+    |----------------|                                  |------------|
+
+
+--- ||---
 --- |SplitterObserver|---
 LongestWord |ReverseWord|WordCount
 ----- |-----|Printer
