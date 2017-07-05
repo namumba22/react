@@ -10,6 +10,9 @@ import java.io.InputStreamReader;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Stream;
 
 /**
@@ -18,26 +21,38 @@ import java.util.stream.Stream;
 public class Main {
 
 
+
+
     public static void main(String... s) throws IOException, InterruptedException, URISyntaxException {
         String fileName = s[0];
 
         final ActorSystem system = ActorSystem.create("root-actor");
 
         try {
-
             final ActorRef printer = system.actorOf(Printer.props(), "printer");
             final ActorRef longestWord = system.actorOf(LongestWord.props(), "longestWord");
             final ActorRef reverseWord = system.actorOf(ReverseWord.props(), "reverseWord");
             final ActorRef wordCounter = system.actorOf(WordCounter.props(printer), "wordCounter");
             final ActorRef splitterObserver = system.actorOf(SplitterObserver.props(longestWord, reverseWord, wordCounter), "splitterObserver");
-
             new WithoutNIOExample(splitterObserver, fileName).main();
+
+//            Alternatively:
+
+            List<String> paths = new ArrayList<>(Arrays.asList("/user/reverseWord", "/user/longestWord", "/user/wordCounter"));
+            final ActorRef broadcast= system.actorOf(new akka.routing.BroadcastGroup(paths).props(), "broadcast");
+            final ActorRef splitterRouterObserver = system.actorOf(SplitterRoterObserver.props(broadcast), "splitterObserver");
+            new WithoutNIOExample(splitterRouterObserver, fileName).main();
+
+
+
 
             Thread.sleep(5000);
         } finally {
             system.terminate();
         }
     }
+
+
 
 
     static class WithoutNIOExample {
